@@ -33,6 +33,10 @@ class Home extends React.Component {
         return tmpUsers;
     }
 
+    handleClickAdd = () => {
+        this.props.history.push("/add");
+    };
+
     render() {
         const { isLoading } = this.props;
         const { filterInfo } = this.state;
@@ -92,7 +96,7 @@ class Home extends React.Component {
                 columns={columns} 
                 dataSource={this.handleData(filterInfo)} 
                 loading={isLoading} 
-                footer={() => <Button type="primary" icon="form">Create New User</Button>} 
+                footer={() => <Button type="primary" icon="form" onClick={this.handleClickAdd} >Create New User</Button>} 
                 />
             </div>
         );
