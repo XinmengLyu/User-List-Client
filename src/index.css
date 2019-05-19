@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.table-container{
+  margin: 0 15px;
+}
+
 .form-container{
   width: 800px;
   margin: auto;

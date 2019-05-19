@@ -1,13 +1,14 @@
 import React from 'react';
 import { Input, Typography, Table, Button, Divider } from 'antd';
 import 'antd/dist/antd.css';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { getList } from '../../redux/actions';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { filterInfo: "" };
+        this.state = { filterInfo: "", isDeleteLoading: false, err: null };
     }
 
     componentDidMount() {
@@ -33,13 +34,26 @@ class Home extends React.Component {
         return tmpUsers;
     }
 
+    handleDelete = (record) => {
+        this.setState({isDeleteLoading: true});
+        axios.delete(`http://localhost:8080/api/users/${record._id}`)
+         .then(res => {
+             this.props.getList();
+             this.setState({isDeleteLoading: false, err: null});
+         })
+         .catch(err => {
+             console.log(err);
+             this.setState({isDataLoading: false, err: err});
+         })
+    }
+
     handleClickAdd = () => {
         this.props.history.push("/add");
     };
 
     render() {
-        const { isLoading } = this.props;
-        const { filterInfo } = this.state;
+        const { isDataLoading } = this.props;
+        const { filterInfo, isDeleteLoading, err } = this.state;
         //define columns for the table
         const columns = [
             {
@@ -78,15 +92,17 @@ class Home extends React.Component {
                 key: 'action',
                 render: (text, record) => (
                   <span>
-                    <Button type="link" >Edit</Button>
+                    <a>Edit</a>
                     <Divider type="vertical" />
-                    <Button type="link" style={{color: "red"}}>Delete</Button>
+                    <Button type="link" style={{color: "red", paddingLeft: "0"}} onClick={() => this.handleDelete(record)} >Delete</Button>
                   </span>
                 ),
               },
         ];
-        return (
-            <div>
+
+        if (err) return (<Typography.Title>There has been an error. Please try again later.</Typography.Title>);
+        else return (
+            <div className="table-container">
                 <Typography.Title>Users</Typography.Title>
                 <Typography.Text>
                     Search:
@@ -95,7 +111,7 @@ class Home extends React.Component {
                 <Table 
                 columns={columns} 
                 dataSource={this.handleData(filterInfo)} 
-                loading={isLoading} 
+                loading={isDataLoading || isDeleteLoading} 
                 footer={() => <Button type="primary" icon="form" onClick={this.handleClickAdd} >Create New User</Button>} 
                 />
             </div>
@@ -107,7 +123,7 @@ class Home extends React.Component {
 const mapStateToProps = state => (
     {
         users: state.data,
-        isLoading: state.isLoading,
+        isDataLoading: state.isLoading,
         err: state.err
     }
 );
