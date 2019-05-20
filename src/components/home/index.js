@@ -1,14 +1,13 @@
 import React from 'react';
 import { Input, Typography, Table, Button, Divider } from 'antd';
 import 'antd/dist/antd.css';
-import axios from 'axios';
 import { connect } from 'react-redux';
-import { getList } from '../../redux/actions';
+import { getList, deleteUser } from '../../redux/actions';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { filterInfo: "", isDeleteLoading: false, err: null };
+        this.state = { filterInfo: "" };
     }
 
     componentDidMount() {
@@ -35,16 +34,8 @@ class Home extends React.Component {
     }
 
     handleDelete = (record) => {
-        this.setState({isDeleteLoading: true});
-        axios.delete(`http://localhost:8080/api/users/${record._id}`)
-         .then(res => {
-             this.props.getList();
-             this.setState({isDeleteLoading: false, err: null});
-         })
-         .catch(err => {
-             console.log(err);
-             this.setState({isDataLoading: false, err: err});
-         })
+        const { history, deleteUser } = this.props;
+        deleteUser(record._id, history);
     }
 
     handleClickAdd = () => {
@@ -52,8 +43,8 @@ class Home extends React.Component {
     };
 
     render() {
-        const { isDataLoading } = this.props;
-        const { filterInfo, isDeleteLoading, err } = this.state;
+        const { isDataLoading, err } = this.props;
+        const { filterInfo } = this.state;
         //define columns for the table
         const columns = [
             {
@@ -100,7 +91,7 @@ class Home extends React.Component {
               },
         ];
 
-        if (err) return (<Typography.Title>There has been an error. Please try again later.</Typography.Title>);
+        if (err) return (<Typography.Title>There has been an error. This page will refresh shortly.</Typography.Title>);
         else return (
             <div className="table-container">
                 <Typography.Title>Users</Typography.Title>
@@ -111,7 +102,7 @@ class Home extends React.Component {
                 <Table 
                 columns={columns} 
                 dataSource={this.handleData(filterInfo)} 
-                loading={isDataLoading || isDeleteLoading} 
+                loading={isDataLoading} 
                 footer={() => <Button type="primary" icon="form" onClick={this.handleClickAdd} >Create New User</Button>} 
                 />
             </div>
@@ -122,9 +113,9 @@ class Home extends React.Component {
 //connect redux to component
 const mapStateToProps = state => (
     {
-        users: state.data,
-        isDataLoading: state.isLoading,
-        err: state.err
+        users: state.list.data,
+        isDataLoading: state.list.isLoading,
+        err: state.list.err
     }
 );
 
@@ -132,6 +123,9 @@ const mapDispatchToProps = dispatch => (
     {
         getList: () => {
             dispatch(getList());
+        },
+        deleteUser: (id, history) => {
+            dispatch(deleteUser(id, history));
         }
     }
 );

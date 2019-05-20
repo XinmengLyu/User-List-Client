@@ -1,35 +1,7 @@
-const initState = {
-    data: [],
-    isLoading: false,
-    err: null
-}
+import { combineReducers } from 'redux';
+import list from './list';
+import detail from './detail';
 
-const reducer = (state = initState, action) => {
-    switch (action.type) {
-        case "GET_LIST_REQUEST": {
-            return {
-                ...state,
-                isLoading: true
-            }
-        }
-        case "GET_LIST_SUCCESS": {
-            return {
-                data: action.data,
-                isLoading: false,
-                err: null
-            }
-        }
-        case "GET_LIST_FAIL": {
-            return {
-                ...state,
-                isLoading: false,
-                err: action.err
-            }
-        }
-        default: {
-            return state;
-        }
-    }
-}
+const reducers = combineReducers({list, detail});
 
-export default reducer;
+export default reducers;
