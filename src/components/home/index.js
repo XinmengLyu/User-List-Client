@@ -11,7 +11,8 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getList();
+        const { getList } = this.props;
+        getList();
     }
 
     handleChange = e => {
@@ -43,7 +44,7 @@ class Home extends React.Component {
     };
 
     render() {
-        const { isDataLoading, err } = this.props;
+        const { isDataLoading, err, getList } = this.props;
         const { filterInfo } = this.state;
         //define columns for the table
         const columns = [
@@ -52,8 +53,8 @@ class Home extends React.Component {
                 dataIndex: 'first_name',
                 key: 'first_name',
                 sorter: (a, b) => {
-                    if(a.first_name < b.first_name) return -1;
-                    else if(a.first_name > b.first_name) return 1;
+                    if (a.first_name < b.first_name) return -1;
+                    else if (a.first_name > b.first_name) return 1;
                     return 0;
                 },
             },
@@ -62,8 +63,8 @@ class Home extends React.Component {
                 dataIndex: 'last_name',
                 key: 'last_name',
                 sorter: (a, b) => {
-                    if(a.last_name < b.last_name) return -1;
-                    else if(a.last_name > b.last_name) return 1;
+                    if (a.last_name < b.last_name) return -1;
+                    else if (a.last_name > b.last_name) return 1;
                     return 0;
                 },
             },
@@ -82,28 +83,30 @@ class Home extends React.Component {
                 title: 'Action',
                 key: 'action',
                 render: (text, record) => (
-                  <span>
-                    <a href={`/edit/${record._id}`}>Edit</a>
-                    <Divider type="vertical" />
-                    <Button type="link" style={{color: "red", paddingLeft: "0"}} onClick={() => this.handleDelete(record)} >Delete</Button>
-                  </span>
+                    <span>
+                        <a href={`/edit/${record._id}`}>Edit</a>
+                        <Divider type="vertical" />
+                        <Button type="link" style={{ color: "red", paddingLeft: "0" }} onClick={() => this.handleDelete(record)} >Delete</Button>
+                    </span>
                 ),
-              },
+            },
         ];
 
-        if (err) return (<Typography.Title>There has been an error. This page will refresh shortly.</Typography.Title>);
-        else return (
+        if (err) {
+            window.setTimeout(getList, 5000);
+            return (<Typography.Title>There has been an error. This page will refresh shortly.</Typography.Title>);
+        } else return (
             <div className="table-container">
                 <Typography.Title>Users</Typography.Title>
                 <Typography.Text>
                     Search:
                     <Input value={filterInfo} onChange={this.handleChange} style={{ width: "120px", margin: "10px 5px" }} />
                 </Typography.Text>
-                <Table 
-                columns={columns} 
-                dataSource={this.handleData(filterInfo)} 
-                loading={isDataLoading} 
-                footer={() => <Button type="primary" icon="form" onClick={this.handleClickAdd} >Create New User</Button>} 
+                <Table
+                    columns={columns}
+                    dataSource={this.handleData(filterInfo)}
+                    loading={isDataLoading}
+                    footer={() => <Button type="primary" icon="form" onClick={this.handleClickAdd} >Create New User</Button>}
                 />
             </div>
         );

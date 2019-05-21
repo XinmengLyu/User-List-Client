@@ -9,7 +9,8 @@ const detail = (state = initState, action) => {
         case "GET_DETAIL_REQUEST": {
             return {
                 ...state,
-                isLoading: true
+                isLoading: true,
+                err: null
             }
         }
         case "GET_DETAIL_SUCCESS": {

@@ -11,8 +11,8 @@ class Edit extends React.Component {
     }
 
     componentDidMount() {
-        const { getDetail, match: { params } } = this.props;
-        getDetail(params.uid);
+        const { getDetail, match: { params }, history } = this.props;
+        getDetail(params.uid, history);
     }
 
     handleSubmit = e => {
@@ -211,8 +211,8 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => (
     {
-        getDetail: (id) => {
-            dispatch(getDetail(id));
+        getDetail: (id, history) => {
+            dispatch(getDetail(id, history));
         },
         updateUser: (id, user, history) => {
             dispatch(updateUser(id, user, history));

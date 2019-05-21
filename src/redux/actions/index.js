@@ -83,7 +83,7 @@ export const deleteUser = (id, history) => {
             .catch(err => {
                 //console.log(err);
                 dispatch(getListFail(err));
-                setTimeout(() => history.push("/"), 5000);
+                window.setTimeout(() => history.push("/"), 5000);
             });
     }
 };
@@ -97,20 +97,18 @@ export const addUser = (user, history) => {
                 history.push('/');
             })
             .catch(err => {
-                //console.log(err);
                 dispatch(updateListFail(err));
-                setTimeout(() => history.push("/add"), 5000);
+                window.setTimeout(() => history.push("/"), 5000);
             });
     }
 };
 
 export const updateUser = (id, user, history) => {
     return (dispatch) => {
-        console.log("axios");
         dispatch(updateListRequest());
         axios.put(`http://localhost:8080/api/users/${id}`, { ...user })
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 if (res.status === 200) {
                     dispatch(updateListSuccess());
                     history.push("/");
@@ -121,7 +119,7 @@ export const updateUser = (id, user, history) => {
             .catch(err => {
                 //console.log(err);
                 dispatch(updateListFail(err));
-                setTimeout(() => history.push(`/edit/${id}`), 5000);
+                window.setTimeout(() => history.push(`/`), 5000);
             });
     }
 }
@@ -147,7 +145,7 @@ const getDetailFail = err => (
     }
 );
 
-export const getDetail = (id) => {
+export const getDetail = (id, history) => {
     return (dispatch) => {
         dispatch(getDetailRequest());
         axios.get(`http://localhost:8080/api/users/${id}`)
@@ -156,6 +154,7 @@ export const getDetail = (id) => {
             })
             .catch((err) => {
                 dispatch(getDetailFail(err));
+                window.setTimeout(() => history.push("/"), 5000);
             });
     };
 };
