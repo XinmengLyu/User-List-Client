@@ -67,6 +67,10 @@ class Add extends React.Component {
         this.setState({ disabled: empty || !matched });
     }
 
+    handleClick = () => {
+        this.props.history.push('/');
+    }
+
     render() {
         const { isLoading, err, form: { getFieldDecorator } } = this.props;
         const { disabled } = this.state;
@@ -87,7 +91,7 @@ class Add extends React.Component {
                     offset: 0,
                 },
                 sm: {
-                    span: 16,
+                    span: 8,
                     offset: 6,
                 },
             },
@@ -169,15 +173,26 @@ class Add extends React.Component {
                         )}
                     </Form.Item>
                     <Form.Item {...tailFormItemLayout} >
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon="download"
-                            disabled={disabled}
-                            loading={isLoading}
-                        >
-                            Add User
-                        </Button>
+                        <span>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                icon="download"
+                                disabled={disabled}
+                                loading={isLoading}
+                            >
+                                Add User
+                            </Button>
+                            <Button
+                                type="danger"
+                                icon="close-circle"
+                                onClick={this.handleClick}
+                                style={{marginLeft: "10px"}}
+                            >
+                                Cancel
+                            </Button>
+                        </span>
+
                     </Form.Item>
                 </Form>
             </div>

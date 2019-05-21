@@ -72,6 +72,10 @@ class Edit extends React.Component {
         this.setState({ disabled: empty || !matched });
     }
 
+    handleClick = () => {
+        this.props.history.push("/");
+    }
+
     render() {
         const { user, isDetailLoading, detailErr, isListLoading, listErr, listWarning, form: { getFieldDecorator } } = this.props;
         const { disabled } = this.state;
@@ -181,15 +185,25 @@ class Edit extends React.Component {
                                 <Alert message="Incorrect Password!" type="error" />
                             </Form.Item>}
                         <Form.Item {...tailFormItemLayout} >
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                icon="download"
-                                disabled={disabled}
-                                loading={isListLoading}
-                            >
-                                Save Change
-                        </Button>
+                            <span>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    icon="download"
+                                    disabled={disabled}
+                                    loading={isListLoading}
+                                >
+                                    Save Change
+                                </Button>
+                                <Button
+                                    type="danger"
+                                    icon="close-circle"
+                                    onClick={this.handleClick}
+                                    style={{ marginLeft: "10px" }}
+                                >
+                                    Cancel
+                                </Button>
+                            </span>
                         </Form.Item>
                     </Form>
                 </Spin>
