@@ -26,6 +26,26 @@ const list = (state = initState, action) => {
                 err: action.err
             }
         }
+        case "UPDATE_LIST_REQUEST": {
+            return {
+                ...state,
+                isLoading: true
+            }
+        }
+        case "UPDATE_LIST_SUCCESS": {
+            return {
+                ...state,
+                isLoading: false,
+                err: null
+            }
+        }
+        case "UPDATE_LIST_FAIL": {
+            return {
+                ...state,
+                isLoading: false,
+                err: action.err
+            }
+        }
         default: {
             return state;
         }

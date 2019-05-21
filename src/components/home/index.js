@@ -83,7 +83,7 @@ class Home extends React.Component {
                 key: 'action',
                 render: (text, record) => (
                   <span>
-                    <a>Edit</a>
+                    <a href={`/edit/${record._id}`}>Edit</a>
                     <Divider type="vertical" />
                     <Button type="link" style={{color: "red", paddingLeft: "0"}} onClick={() => this.handleDelete(record)} >Delete</Button>
                   </span>

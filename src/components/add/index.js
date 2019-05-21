@@ -1,37 +1,29 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { Typography, Form, Input, InputNumber, Select, Button } from 'antd';
 import "antd/dist/antd.css";
-import axios from 'axios';
+import {addUser} from '../../redux/actions';
 
 class Add extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { confirmDirty: false, disabled: true, isLoading: false, err: null };
+        this.state = { confirmDirty: false, disabled: true };
     }
 
     handleSubmit = e => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        const {form, addUser, history} = this.props
+        form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log(values);
-                this.setState({ isLoading: true });
-                axios.post("http://localhost:8080/api/users", {
+                //console.log(values);
+                const user = {
                     first_name: values.first_name,
                     last_name: values.last_name,
                     age: values.age,
                     gender: values.gender,
                     password: values.password
-                })
-                    .then(res => {
-                        this.setState({ isLoading: false, err: null });
-                        this.props.history.push("/");
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        this.setState({ isLoading: false, err: err }, () => {
-                            setTimeout(() => { this.props.history.push("/add"); }, 5000);
-                        });
-                    });
+                };
+                addUser(user, history);
             }
         });
     };
@@ -76,8 +68,8 @@ class Add extends React.Component {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const { err, disabled, isLoading } = this.state;
+        const { isLoading, err, form:{getFieldDecorator} } = this.props;
+        const { disabled } = this.state;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -170,7 +162,6 @@ class Add extends React.Component {
                                 },
                                 {
                                     validator: this.compareToFirstPassword,
-                                    //message: "inconsistant!"
                                 }
                             ]
                         })(
@@ -185,7 +176,7 @@ class Add extends React.Component {
                             disabled={disabled}
                             loading={isLoading}
                         >
-                            Add New User
+                            Add User
                         </Button>
                     </Form.Item>
                 </Form>
@@ -194,4 +185,19 @@ class Add extends React.Component {
     }
 }
 
-export default Form.create()(Add);
+const mapStateToProps = state => (
+    {
+        isLoading: state.list.isLoading,
+        err: state.list.err
+    }
+)
+
+const mapDispatchToProps = dispatch => (
+    {
+        addUser: (user, history) => {
+            dispatch(addUser(user, history));
+        }
+    }
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(Add));
