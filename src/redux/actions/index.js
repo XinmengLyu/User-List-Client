@@ -40,6 +40,13 @@ const updateListFail = (err) => (
     }
 )
 
+const updateListWarning = (warning) => (
+    {
+        type: "UPDATE_LIST_WARNING",
+        warning: warning
+    }
+)
+
 const decorateData = (data) => {
     return data.map((user, index) => {
         return {
@@ -103,13 +110,18 @@ export const updateUser = (id, user, history) => {
         dispatch(updateListRequest());
         axios.put(`http://localhost:8080/api/users/${id}`, { ...user })
             .then(res => {
-                dispatch(updateListSuccess());
-                history.push("/");
+                console.log(res);
+                if (res.status === 200) {
+                    dispatch(updateListSuccess());
+                    history.push("/");
+                } else {
+                    dispatch(updateListWarning(res.data));
+                }
             })
             .catch(err => {
                 //console.log(err);
                 dispatch(updateListFail(err));
-                setTimeout(() => history.push(`/edit/${user._id}`), 5000);
+                setTimeout(() => history.push(`/edit/${id}`), 5000);
             });
     }
 }

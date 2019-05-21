@@ -1,6 +1,7 @@
 const initState = {
     data: [],
     isLoading: false,
+    warning: null,
     err: null
 };
 
@@ -16,6 +17,7 @@ const list = (state = initState, action) => {
             return {
                 data: action.data,
                 isLoading: false,
+                warning: null,
                 err: null
             }
         }
@@ -23,6 +25,7 @@ const list = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                warning: null,
                 err: action.err
             }
         }
@@ -36,6 +39,7 @@ const list = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                warning: null,
                 err: null
             }
         }
@@ -43,7 +47,16 @@ const list = (state = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                warning: null,
                 err: action.err
+            }
+        }
+        case "UPDATE_LIST_WARNING": {
+            return {
+                ...state,
+                isLoading: false,
+                warning: action.warning,
+                err: null
             }
         }
         default: {

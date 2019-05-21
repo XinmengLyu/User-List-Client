@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Typography, Form, Spin, Input, InputNumber, Select, Button } from 'antd';
+import { Typography, Form, Spin, Input, InputNumber, Select, Alert, Button } from 'antd';
 import "antd/dist/antd.css";
 import { getDetail, updateUser } from '../../redux/actions';
 
@@ -17,7 +17,7 @@ class Edit extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        const { match: {params}, form, updateUser, history } = this.props
+        const { match: { params }, form, updateUser, history } = this.props
         form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 //console.log(values);
@@ -25,7 +25,8 @@ class Edit extends React.Component {
                     first_name: values.first_name,
                     last_name: values.last_name,
                     age: values.age,
-                    gender: values.gender
+                    gender: values.gender,
+                    password: values.password
                 };
                 updateUser(params.uid, user, history);
             }
@@ -72,7 +73,7 @@ class Edit extends React.Component {
     }
 
     render() {
-        const { user, isDetailLoading, detailErr, isListLoading, listErr, form: { getFieldDecorator } } = this.props;
+        const { user, isDetailLoading, detailErr, isListLoading, listErr, listWarning, form: { getFieldDecorator } } = this.props;
         const { disabled } = this.state;
         const formItemLayout = {
             labelCol: {
@@ -91,7 +92,7 @@ class Edit extends React.Component {
                     offset: 0,
                 },
                 sm: {
-                    span: 16,
+                    span: 8,
                     offset: 6,
                 },
             },
@@ -175,6 +176,10 @@ class Edit extends React.Component {
                                 <Input.Password onBlur={this.handleConfirmBlur} onChange={e => this.handleChange(e, "confirm")} />
                             )}
                         </Form.Item>
+                        {listWarning && 
+                            <Form.Item {...tailFormItemLayout}>
+                                <Alert message="Incorrect Password!" type="error" />
+                            </Form.Item>}
                         <Form.Item {...tailFormItemLayout} >
                             <Button
                                 type="primary"
@@ -197,6 +202,7 @@ const mapStateToProps = state => (
     {
         isListLoading: state.list.isLoading,
         listErr: state.list.err,
+        listWarning: state.list.warning,
         user: state.detail.data,
         isDetailLoading: state.detail.isLoading,
         detailErr: state.detail.err
