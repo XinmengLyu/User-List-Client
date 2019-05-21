@@ -70,11 +70,12 @@ export const getList = () => {
     };
 };
 
-export const deleteUser = (id, history) => {
+export const deleteUser = (id, message, history) => {
     return (dispatch) => {
         dispatch(getListRequest());
         axios.delete(`http://localhost:8080/api/users/${id}`)
-            .then(res => axios.get("http://localhost:8080/api/users"))
+            .then(res => message.success("User delete", 2))
+            .then(() => axios.get("http://localhost:8080/api/users"))
             .then(res => {
                 //console.log(res);
                 const decoratedData = decorateData(res.data)
@@ -88,22 +89,26 @@ export const deleteUser = (id, history) => {
     }
 };
 
-export const addUser = (user, history) => {
+export const addUser = (user, message, history) => {
     return (dispatch) => {
         dispatch(updateListRequest());
         axios.post("http://localhost:8080/api/users", { ...user })
             .then(res => {
                 dispatch(updateListSuccess());
-                history.push('/');
+                return message.success("User add", 2);
             })
+            .then(
+                () => history.push('/')
+            )
             .catch(err => {
+                //console.log(err);
                 dispatch(updateListFail(err));
                 window.setTimeout(() => history.push("/"), 5000);
             });
     }
 };
 
-export const updateUser = (id, user, history) => {
+export const updateUser = (id, user, message, history) => {
     return (dispatch) => {
         dispatch(updateListRequest());
         axios.put(`http://localhost:8080/api/users/${id}`, { ...user })
@@ -111,7 +116,7 @@ export const updateUser = (id, user, history) => {
                 //console.log(res);
                 if (res.status === 200) {
                     dispatch(updateListSuccess());
-                    history.push("/");
+                    message.success("User update", 2, () => history.push("/"));
                 } else {
                     dispatch(updateListWarning(res.data));
                 }

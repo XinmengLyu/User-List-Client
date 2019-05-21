@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Typography, Table, Button, Divider } from 'antd';
+import { Input, Typography, Table, Button, Divider, message } from 'antd';
 import 'antd/dist/antd.css';
 import { connect } from 'react-redux';
 import { getList, deleteUser } from '../../redux/actions';
@@ -36,7 +36,7 @@ class Home extends React.Component {
 
     handleDelete = (record) => {
         const { history, deleteUser } = this.props;
-        deleteUser(record._id, history);
+        deleteUser(record._id, message, history);
     }
 
     handleClickAdd = () => {
@@ -127,8 +127,8 @@ const mapDispatchToProps = dispatch => (
         getList: () => {
             dispatch(getList());
         },
-        deleteUser: (id, history) => {
-            dispatch(deleteUser(id, history));
+        deleteUser: (id, message, history) => {
+            dispatch(deleteUser(id, message, history));
         }
     }
 );

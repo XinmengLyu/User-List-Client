@@ -1,8 +1,8 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import { Typography, Form, Input, InputNumber, Select, Button } from 'antd';
+import { connect } from 'react-redux';
+import { Typography, Form, Input, InputNumber, Select, Button, message } from 'antd';
 import "antd/dist/antd.css";
-import {addUser} from '../../redux/actions';
+import { addUser } from '../../redux/actions';
 
 class Add extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class Add extends React.Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        const {form, addUser, history} = this.props
+        const { form, addUser, history } = this.props
         form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 //console.log(values);
@@ -23,7 +23,7 @@ class Add extends React.Component {
                     gender: values.gender,
                     password: values.password
                 };
-                addUser(user, history);
+                addUser(user, message, history);
             }
         });
     };
@@ -68,7 +68,7 @@ class Add extends React.Component {
     }
 
     render() {
-        const { isLoading, err, form:{getFieldDecorator} } = this.props;
+        const { isLoading, err, form: { getFieldDecorator } } = this.props;
         const { disabled } = this.state;
         const formItemLayout = {
             labelCol: {
@@ -194,8 +194,8 @@ const mapStateToProps = state => (
 
 const mapDispatchToProps = dispatch => (
     {
-        addUser: (user, history) => {
-            dispatch(addUser(user, history));
+        addUser: (user, message, history) => {
+            dispatch(addUser(user, message, history));
         }
     }
 )

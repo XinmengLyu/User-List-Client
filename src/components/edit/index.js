@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Typography, Form, Spin, Input, InputNumber, Select, Alert, Button } from 'antd';
+import { Typography, Form, Spin, Input, InputNumber, Select, Alert, Button, message } from 'antd';
 import "antd/dist/antd.css";
 import { getDetail, updateUser } from '../../redux/actions';
 
@@ -28,7 +28,7 @@ class Edit extends React.Component {
                     gender: values.gender,
                     password: values.password
                 };
-                updateUser(params.uid, user, history);
+                updateUser(params.uid, user, message, history);
             }
         });
     };
@@ -176,7 +176,7 @@ class Edit extends React.Component {
                                 <Input.Password onBlur={this.handleConfirmBlur} onChange={e => this.handleChange(e, "confirm")} />
                             )}
                         </Form.Item>
-                        {listWarning && 
+                        {listWarning &&
                             <Form.Item {...tailFormItemLayout}>
                                 <Alert message="Incorrect Password!" type="error" />
                             </Form.Item>}
@@ -214,8 +214,8 @@ const mapDispatchToProps = dispatch => (
         getDetail: (id, history) => {
             dispatch(getDetail(id, history));
         },
-        updateUser: (id, user, history) => {
-            dispatch(updateUser(id, user, history));
+        updateUser: (id, user, message, history) => {
+            dispatch(updateUser(id, user, message, history));
         }
     }
 )
