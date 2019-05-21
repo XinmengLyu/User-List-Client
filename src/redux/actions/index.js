@@ -95,7 +95,7 @@ export const addUser = (user, message, history) => {
         axios.post("http://localhost:8080/api/users", { ...user })
             .then(res => {
                 dispatch(updateListSuccess());
-                return message.success("User add", 2);
+                return message.success("User added", 2);
             })
             .then(
                 () => history.push('/')
@@ -116,7 +116,7 @@ export const updateUser = (id, user, message, history) => {
                 //console.log(res);
                 if (res.status === 200) {
                     dispatch(updateListSuccess());
-                    message.success("User update", 2, () => history.push("/"));
+                    message.success("User updated", 2, () => history.push("/"));
                 } else {
                     dispatch(updateListWarning(res.data));
                 }
