@@ -86,7 +86,7 @@ export const deleteUser = (id, message, history) => {
                 dispatch(getListFail(err));
                 window.setTimeout(() => history.push("/"), 5000);
             });
-    }
+    };
 };
 
 export const addUser = (user, message, history) => {
@@ -105,7 +105,7 @@ export const addUser = (user, message, history) => {
                 dispatch(updateListFail(err));
                 window.setTimeout(() => history.push("/"), 5000);
             });
-    }
+    };
 };
 
 export const updateUser = (id, user, message, history) => {
@@ -126,7 +126,7 @@ export const updateUser = (id, user, message, history) => {
                 dispatch(updateListFail(err));
                 window.setTimeout(() => history.push(`/`), 5000);
             });
-    }
+    };
 }
 
 //actions on detail reducer
